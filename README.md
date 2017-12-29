@@ -1,4 +1,6 @@
-# Code Challenge
+# Tweeter Backend
+
+This is a backend for a tweeter
 
 ## Description
 
@@ -187,7 +189,7 @@ run
 
 then
 
-` java -jar target/code-challenge-1.0.0.jar`
+` java -jar target/tweeter-backend-1.0.0.jar`
 
 
 
