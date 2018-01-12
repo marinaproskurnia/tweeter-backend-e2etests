@@ -1,14 +1,15 @@
 package com.illichso.rest;
 
-import com.illichso.model.entity.Post;
 import com.illichso.model.dto.Like;
 import com.illichso.model.dto.UserPost;
 import com.illichso.model.dto.UserRepost;
+import com.illichso.model.entity.Post;
 import com.illichso.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class PostController {
     }
 
     @RequestMapping(method = POST)
+    @ResponseBody
     public void savePost(@RequestBody UserPost userPost) {
         postService.savePost(userPost);
     }

@@ -2,11 +2,12 @@ package com.illichso.service.impl;
 
 import com.illichso.exception.PostSizeExceedException;
 import com.illichso.exception.UserDoesNotExistException;
-import com.illichso.model.entity.Post;
-import com.illichso.model.entity.User;
+import com.illichso.h2DataBase.DataBaseHandler;
 import com.illichso.model.dto.Like;
 import com.illichso.model.dto.UserPost;
 import com.illichso.model.dto.UserRepost;
+import com.illichso.model.entity.Post;
+import com.illichso.model.entity.User;
 import com.illichso.repository.PostRepository;
 import com.illichso.repository.UserRepository;
 import com.illichso.service.PostService;
@@ -37,13 +38,29 @@ public class PostServiceImpl implements PostService {
     public void savePost(UserPost userPost) {
         if (isPostValid(userPost)) {
             User user = obtainUser(userPost);
-
             Post post = new Post(userPost.getText(), user);
             postRepository.save(post);
 
+            long id = post.getId();
+            String text = formatPostText(post);
+            DataBaseHandler dataBaseHandler = new DataBaseHandler();
+            dataBaseHandler.insertIntoPostsTable(id, text);
+            dataBaseHandler.selectFromPostsTable();
         } else {
             throw new PostSizeExceedException();
         }
+    }
+
+    private String formatPostText(Post post) {
+        char[] textAsArray = post.getText().toCharArray();
+        StringBuilder textFormatted = new StringBuilder();
+        for(char c : textAsArray) {
+            textFormatted.append(c);
+            if(c == '\'') {
+                textFormatted.append(c);
+            }
+        }
+        return textFormatted.toString();
     }
 
     private boolean isPostValid(UserPost userPost) {
@@ -71,6 +88,9 @@ public class PostServiceImpl implements PostService {
 
     public void deletePost(long postId) {
         postRepository.delete(postId);
+
+        DataBaseHandler dataBaseHandler = new DataBaseHandler();
+        dataBaseHandler.deleteByPostIdFromPostsTable(postId);
     }
 
     public List<Post> getWall(long userId) {

@@ -29,6 +29,7 @@ import static lombok.AccessLevel.NONE;
 @EqualsAndHashCode(exclude = {"user", "originalPosts", "reactedUsers"})
 @ToString(exclude = {"user", "originalPosts", "reactedUsers"})
 public class Post implements Serializable {
+
     @Id
     @GeneratedValue(strategy = AUTO)
     @Setter(NONE)

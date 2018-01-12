@@ -1,0 +1,12 @@
+package com.illichso.stepsDefinitions;
+
+
+import cucumber.api.CucumberOptions;
+import cucumber.api.junit.Cucumber;
+import org.junit.runner.RunWith;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(features = {"classpath:resources"})
+public class E2eTestsRunner {
+}
+

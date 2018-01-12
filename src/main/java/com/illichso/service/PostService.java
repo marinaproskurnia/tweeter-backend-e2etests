@@ -1,9 +1,9 @@
 package com.illichso.service;
 
-import com.illichso.model.entity.Post;
 import com.illichso.model.dto.Like;
 import com.illichso.model.dto.UserPost;
 import com.illichso.model.dto.UserRepost;
+import com.illichso.model.entity.Post;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.illichso;
 
+import com.illichso.h2DataBase.DataBaseHandler;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
@@ -11,5 +12,7 @@ public class Application {
 
     public static void main(String[] args) {
         run(Application.class, args);
+        DataBaseHandler.createPostsTable();
+        DataBaseHandler.createUsersTable();
     }
 }

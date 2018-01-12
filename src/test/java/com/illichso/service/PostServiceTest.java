@@ -2,10 +2,10 @@ package com.illichso.service;
 
 import com.illichso.exception.PostSizeExceedException;
 import com.illichso.exception.UserDoesNotExistException;
-import com.illichso.model.entity.Post;
-import com.illichso.model.entity.User;
 import com.illichso.model.dto.Like;
 import com.illichso.model.dto.UserPost;
+import com.illichso.model.entity.Post;
+import com.illichso.model.entity.User;
 import com.illichso.repository.PostRepository;
 import com.illichso.repository.UserRepository;
 import com.illichso.service.impl.PostServiceImpl;
