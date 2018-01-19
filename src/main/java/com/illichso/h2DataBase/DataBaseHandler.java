@@ -1,14 +1,12 @@
 package com.illichso.h2DataBase;
 
-import org.springframework.stereotype.Component;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-@Component
+//@Component
 public class DataBaseHandler {
 
     private static final String DB_DRIVER = "org.h2.Driver";

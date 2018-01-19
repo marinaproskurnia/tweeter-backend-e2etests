@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.3.RELEASE</version>
+        <version>1.5.9.RELEASE</version>
     </parent>
 
     <properties>
@@ -22,7 +22,44 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <commons-lang3.version>3.5</commons-lang3.version>
+        <skipUnitTests>true</skipUnitTests>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>e2etests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <build>
+
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.20.1</version>
+                        <configuration>
+                            <skipTests>${skipUnitTests}</skipTests>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.20.1</version>
+                        <executions>
+                            <execution>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -33,6 +70,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+            <version>1.16.16</version>
         </dependency>
 
         <dependency>
@@ -42,8 +80,6 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.196</version>
-            <!--<scope>runtime</scope>-->
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -69,32 +105,16 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-
-        <!--<dependency>-->
-            <!--<groupId>info.cukes</groupId>-->
-            <!--<artifactId>cucumber-jvm</artifactId>-->
-            <!--<version>1.2.5</version>-->
-            <!--<type>pom</type>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>io.cucumber</groupId>-->
-            <!--<artifactId>cucumber-java8</artifactId>-->
-            <!--<version>1.2.5</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>io.cucumber</groupId>-->
-            <!--<artifactId>cucumber-spring</artifactId>-->
-            <!--<version>2.3.1</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
+        <!--dependencies for e2etests-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
+            <version>4.11</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>2.3.1</version>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
@@ -107,34 +127,31 @@
             <version>2.3.1</version>
         </dependency>
         <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit</artifactId>
-            <version>2.3.1</version>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.foreach.cwb</groupId>
+            <artifactId>cwb-rest</artifactId>
+            <version>1.1.0.RELEASE</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-jvm</artifactId>
-            <version>2.3.1</version>
-            <type>pom</type>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.0.2.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-jvm-deps</artifactId>
-            <version>1.0.6</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>io.cucumber</groupId>-->
-            <!--<artifactId>gherkin-jvm-deps</artifactId>-->
-            <!--<version>1.0.4</version>-->
-        <!--</dependency>-->
-
-
 
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/it/resources</directory>
+            </testResource>
+        </testResources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -153,6 +170,25 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
+                <executions>
+                    <execution>
+                        <!--<id>add-integration-test-source-as-test-sources</id>-->
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/it/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
