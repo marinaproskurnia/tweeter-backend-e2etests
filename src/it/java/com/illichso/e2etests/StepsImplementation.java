@@ -1,14 +1,11 @@
 package com.illichso.e2etests;
 
-import com.illichso.e2etests.configuration.E2eTestsConfiguration;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.ValidatableResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
 
-@ContextConfiguration(classes = {E2eTestsConfiguration.class})
 public class StepsImplementation {
 
     @Value("${baseUri}")
@@ -18,10 +15,6 @@ public class StepsImplementation {
     private RequestBody requestBody;
 
     private ValidatableResponse response;
-
-//    StepsImplementation() {
-//        requestBody = new RequestBody();
-//    }
 
     public void setUserName(String userName) {
         requestBody.setUserName(userName);
@@ -44,6 +37,6 @@ public class StepsImplementation {
 
 
     public void checkResponseHttpStatus(int httpStatus) {
-       response.assertThat().statusCode(httpStatus);
+        response.assertThat().statusCode(httpStatus);
     }
 }

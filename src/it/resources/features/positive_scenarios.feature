@@ -8,8 +8,9 @@ Feature: Positive scenarios for Tweeter backend
     Then the status of the response should be 200
 
     Examples:
-      | name | text        |
-      | Adam | Adam's text |
+      | name | text                  |
+      | Adam | Adam's text           |
+      | Beth | Beth wrote more words |
 
 
 #  Scenario Outline: Post deleting

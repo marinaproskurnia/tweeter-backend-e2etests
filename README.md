@@ -200,3 +200,21 @@ then
 - we don't care about user authentication
 - we don't care about frontend, only backend
 - we don't care about storage: storing everything in memory is fine
+
+
+## E2E tests (integration tests)
+##### Preconditions:
+
+- start H2 Console application from PC Start (GUI of DB);
+- compile project with command: 
+    mvn clean compile
+- run Spring Boot application (main method from Application.java);
+    
+##### Run all tests (unit and e2e tests):
+
+  `mvn clean verify`
+  
+##### Run only e2e tests from the command line:
+    
+  `mvn clean verify -Pe2etests` 
+
