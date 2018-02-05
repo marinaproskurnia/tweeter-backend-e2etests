@@ -2,6 +2,7 @@ package com.illichso.service;
 
 import com.illichso.exception.PostSizeExceedException;
 import com.illichso.exception.UserDoesNotExistException;
+import com.illichso.h2DataBase.InsertOperations;
 import com.illichso.model.dto.Like;
 import com.illichso.model.dto.UserPost;
 import com.illichso.model.entity.Post;
@@ -38,6 +39,9 @@ public class PostServiceTest {
 
     @Mock
     private PostRepository postRepository;
+
+    @Mock
+    private InsertOperations insertOperations;
 
     private static final int POST_MAX_LENGTH = 140;
 

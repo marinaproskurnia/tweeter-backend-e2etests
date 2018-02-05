@@ -1,11 +1,13 @@
-package com.illichso.e2etests;
+package com.illichso.e2etests.steps.components;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(JsonInclude.Include.ALWAYS)
 public class RequestBody {
 
+    @JsonProperty("userName")
     private String userName;
+
+    @JsonProperty("text")
     private String text;
 
     public String getUserName() {

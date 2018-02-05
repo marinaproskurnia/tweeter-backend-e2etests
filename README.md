@@ -205,16 +205,15 @@ then
 ## E2E tests (integration tests)
 ##### Preconditions:
 
-- start H2 Console application from PC Start (GUI of DB);
-- compile project with command: 
-    mvn clean compile
-- run Spring Boot application (main method from Application.java);
+- start H2 Console application from PC Start menu (in order to check its status - go to GUI of DB at http://localhost:8082/);
+- compile project with command:
+    `mvn clean compile`
+- run Spring Boot application (call main method from Application.java);
     
 ##### Run all tests (unit and e2e tests):
 
-  `mvn clean verify`
+  `mvn verify`
   
 ##### Run only e2e tests from the command line:
     
-  `mvn clean verify -Pe2etests` 
-
+  `mvn verify -Pe2etests` 

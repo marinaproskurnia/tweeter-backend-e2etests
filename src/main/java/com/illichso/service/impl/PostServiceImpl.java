@@ -2,7 +2,8 @@ package com.illichso.service.impl;
 
 import com.illichso.exception.PostSizeExceedException;
 import com.illichso.exception.UserDoesNotExistException;
-import com.illichso.h2DataBase.DataBaseHandler;
+import com.illichso.h2DataBase.DeleteOperations;
+import com.illichso.h2DataBase.InsertOperations;
 import com.illichso.model.dto.Like;
 import com.illichso.model.dto.UserPost;
 import com.illichso.model.dto.UserRepost;
@@ -25,14 +26,18 @@ import static java.lang.String.valueOf;
 public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final InsertOperations insertOperations;
+    private final DeleteOperations deleteOperations;
 
     @Value("${post-max-length}")
     private int postMaxLength;
 
     @Autowired
-    public PostServiceImpl(UserRepository userRepository, PostRepository postRepository) {
+    public PostServiceImpl(UserRepository userRepository, PostRepository postRepository, InsertOperations insertOperations, DeleteOperations deleteOperations) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.insertOperations = insertOperations;
+        this.deleteOperations = deleteOperations;
     }
 
     public void savePost(UserPost userPost) {
@@ -41,40 +46,30 @@ public class PostServiceImpl implements PostService {
             Post post = new Post(userPost.getText(), user);
             postRepository.save(post);
 
-            long id = post.getId();
-            String text = formatPostText(post);
-            DataBaseHandler dataBaseHandler = new DataBaseHandler();
-            dataBaseHandler.insertIntoPostsTable(id, text);
-            dataBaseHandler.selectFromPostsTable();
+            insertOperations.insertRecordIntoUsersTable(user);
+            insertOperations.insertRecordIntoPostsTable(post);
         } else {
             throw new PostSizeExceedException();
         }
     }
 
-    private String formatPostText(Post post) {
-        char[] textAsArray = post.getText().toCharArray();
-        StringBuilder textFormatted = new StringBuilder();
-        for(char c : textAsArray) {
-            textFormatted.append(c);
-            if(c == '\'') {
-                textFormatted.append(c);
-            }
-        }
-        return textFormatted.toString();
-    }
 
     private boolean isPostValid(UserPost userPost) {
         return valueOf(userPost.getText()).length() <= postMaxLength;
     }
 
     private User obtainUser(UserPost userPost) {
-        User user = new User(userPost);
-        if (user.getId() == 0) {
-            user = userRepository.save(user);
+        User userObtained;
+        long userIdFromPost = userPost.getUserId();
+        String userNameFromPost = userPost.getUserName();
+
+        User userFromPost = userRepository.findOne(userIdFromPost);
+        if(userFromPost == null || userIdFromPost == 0) {
+            userObtained = userRepository.save(new User(userNameFromPost));
         } else {
-            user = userRepository.findOne(user.getId());
+            userObtained = userFromPost;
         }
-        return user;
+        return userObtained;
     }
 
     public void saveRepost(UserRepost userRepost) {
@@ -88,9 +83,7 @@ public class PostServiceImpl implements PostService {
 
     public void deletePost(long postId) {
         postRepository.delete(postId);
-
-        DataBaseHandler dataBaseHandler = new DataBaseHandler();
-        dataBaseHandler.deleteByPostIdFromPostsTable(postId);
+        deleteOperations.deleteRecordFromPostsTable(postId);
     }
 
     public List<Post> getWall(long userId) {

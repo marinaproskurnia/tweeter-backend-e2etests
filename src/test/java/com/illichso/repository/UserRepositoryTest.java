@@ -1,6 +1,7 @@
 package com.illichso.repository;
 
 import com.illichso.Application;
+import com.illichso.h2DataBase.InsertOperations;
 import com.illichso.model.entity.User;
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private InsertOperations insertOperations;
     private User user;
     private static String userName = "name1";
 
@@ -33,6 +35,7 @@ public class UserRepositoryTest {
     public void saveNewUser() {
 
         userRepository.save(user);
+        insertOperations.insertRecordIntoUsersTable(user);
 
         List<User> foundUserList = userRepository.findAll();
         assertThat(foundUserList.size()).isEqualTo(1);
