@@ -217,3 +217,4 @@ then
 ##### Run only e2e tests from the command line:
     
   `mvn verify -Pe2etests` 
+"# tweeter-backend-e2etests" 
