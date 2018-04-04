@@ -19,4 +19,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select m from Post m where m.user in (:users) order by m.dateTime desc, m.id desc")
     List<Post> getTimeline(@Param("users") Set<User> users);
 
+    Post findByUser(User user);
 }

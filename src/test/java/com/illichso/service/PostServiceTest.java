@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -24,8 +25,6 @@ import java.util.List;
 import static junit.framework.TestCase.fail;
 import static org.apache.commons.lang3.StringUtils.leftPad;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 @RunWith(SpringRunner.class)
@@ -76,28 +75,28 @@ public class PostServiceTest {
 
     @Test
     public void testSaveValidPostForNewUser() {
-        when(userRepository.save(newUser1)).thenReturn(savedUser1);
-        when(postRepository.save(newPost1)).thenReturn(savedPost1);
+        Mockito.when(userRepository.save(newUser1)).thenReturn(savedUser1);
+        Mockito.when(postRepository.save(newPost1)).thenReturn(savedPost1);
 
         setField(postService, "postMaxLength", POST_MAX_LENGTH);
 
         try {
             postService.savePost(userPost1);
         } catch (PostSizeExceedException e) {
-            fail("Exception should not be thrown");
+            fail("Exception shouldThrowConstraintViolationExceptionWhenPostTextSizeExceeded not be thrown");
         }
     }
 
     @Test
     public void testSaveValidPostForExistingUser() {
-        when(userRepository.findOne(savedUser1.getId())).thenReturn(savedUser1);
-        when(postRepository.save(newPost1)).thenReturn(savedPost1);
+        Mockito.when(userRepository.findOne(savedUser1.getId())).thenReturn(savedUser1);
+        Mockito.when(postRepository.save(newPost1)).thenReturn(savedPost1);
         setField(postService, "postMaxLength", POST_MAX_LENGTH);
 
         try {
             postService.savePost(userPost1);
         } catch (PostSizeExceedException e) {
-            fail("Exception should not be thrown");
+            fail("Exception shouldThrowConstraintViolationExceptionWhenPostTextSizeExceeded not be thrown");
         }
     }
 
@@ -115,8 +114,8 @@ public class PostServiceTest {
 
     @Test
     public void testGetWallForExistingUser() {
-        when(userRepository.findOne(savedUser1.getId())).thenReturn(savedUser1);
-        when(postRepository.getWall(savedUser1)).thenReturn(user1Wall);
+        Mockito.when(userRepository.findOne(savedUser1.getId())).thenReturn(savedUser1);
+        Mockito.when(postRepository.getWall(savedUser1)).thenReturn(user1Wall);
         List<Post> wall = postService.getWall(savedUser1.getId());
         assertThat(wall.size()).isEqualTo(1);
         assertThat(wall.get(0)).isEqualTo(savedPost1);
@@ -124,7 +123,7 @@ public class PostServiceTest {
 
     @Test
     public void testGetWallForNotExistingUser() {
-        when(userRepository.findOne(newUser1.getId())).thenReturn(null);
+        Mockito.when(userRepository.findOne(newUser1.getId())).thenReturn(null);
         try {
             postService.getWall(newPost1.getId());
             fail("Exception not thrown");
@@ -135,8 +134,8 @@ public class PostServiceTest {
 
     @Test
     public void testGetTimelineForExistingUser() {
-        when(userRepository.findOne(follower.getId())).thenReturn(follower);
-        when(postRepository.getTimeline(follower.getFollowees())).thenReturn(follower1Timeline);
+        Mockito.when(userRepository.findOne(follower.getId())).thenReturn(follower);
+        Mockito.when(postRepository.getTimeline(follower.getFollowees())).thenReturn(follower1Timeline);
 
         List<Post> tileLine = postService.getTimeline(follower.getId());
 
@@ -146,7 +145,7 @@ public class PostServiceTest {
 
     @Test
     public void testGetTimelineForNotExistingUser() {
-        when(userRepository.findOne(newUser1.getId())).thenReturn(null);
+        Mockito.when(userRepository.findOne(newUser1.getId())).thenReturn(null);
         try {
             postService.getTimeline(follower.getId());
             fail("Exception not thrown");
@@ -158,8 +157,8 @@ public class PostServiceTest {
     @Test
     public void testLikePost() {
         Like like = new Like(savedUser1.getId(), savedPost1.getId());
-        when(userRepository.findOne(savedUser1.getId())).thenReturn(savedUser1);
-        when(postRepository.findOne(savedPost1.getId())).thenReturn(savedPost1);
+        Mockito.when(userRepository.findOne(savedUser1.getId())).thenReturn(savedUser1);
+        Mockito.when(postRepository.findOne(savedPost1.getId())).thenReturn(savedPost1);
 
         postService.likePost(like);
 
@@ -169,6 +168,6 @@ public class PostServiceTest {
 
     @After
     public void cleanup() {
-        reset(userRepository, postRepository);
+        Mockito.reset(userRepository, postRepository);
     }
 }
